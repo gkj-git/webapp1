@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: GKJ-SELFHOST
+  name: GKJ-Host
 
 steps:
 - script: echo Hello, world!
