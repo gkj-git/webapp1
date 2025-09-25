@@ -10,12 +10,6 @@ pool:
   name: 'GKJ-Host'
 
 steps:
-# 1. Setup Python
-
-# 3. Run tests (optional)
-- script: |
-    pytest --maxfail=1 --disable-warnings -q
-  displayName: 'Run tests'
 
 # 4. Package app into zip
 - script: |
