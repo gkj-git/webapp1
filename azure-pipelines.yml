@@ -4,24 +4,46 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- main   # or master, depending on your branch
 
 pool:
-  name: GKJ-Host
+  name: 'GKJ-Host'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+# 1. Setup Python
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.10'
+    addToPath: true
 
+# 2. Install dependencies (optional: add pytest if you want tests)
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install Python dependencies'
 
+# 3. Run tests (optional)
+- script: |
+    pytest --maxfail=1 --disable-warnings -q
+  displayName: 'Run tests'
+
+# 4. Package app into zip
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)
+    zip -r $(Build.ArtifactStagingDirectory)/python_app.zip .
+  displayName: "Package Python app as zip"
+
+# 5. Publish build artifacts
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+
+# 6. Deploy to Azure App Service
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: 'Azure subscription 1(591688ab-53a3-4d1e-b476-0f5ed94d646c)'
-    appType: 'webAppLinux'
-    appName: 'GKJ-APP2'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    runtimeStack: 'PYTHON|3.13'
+    appName: '<YOUR-APP-SERVICE-NAME>'
+    package: '$(Pipeline.Workspace)/drop/python_app.zip'
+
+
+
