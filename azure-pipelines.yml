@@ -11,16 +11,6 @@ pool:
 
 steps:
 # 1. Setup Python
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.13.7'
-    addToPath: true
-
-# 2. Install dependencies (optional: add pytest if you want tests)
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install Python dependencies'
 
 # 3. Run tests (optional)
 - script: |
