@@ -13,7 +13,7 @@ steps:
 # 1. Setup Python
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.10'
+    versionSpec: '3.13'
     addToPath: true
 
 # 2. Install dependencies (optional: add pytest if you want tests)
